@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Sample Chat App",
   "main": "server.js",
- 
   "author": "James Gathu",
   "license": "ISC",
   "dependencies": {

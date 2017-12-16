@@ -6,7 +6,7 @@ npm install
 ```
 configure the ``package.json`` relative to you settings
 ```bash
-npm server
+node server
 ```
 on your browser visit ``localhost:3000``
 
