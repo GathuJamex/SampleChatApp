@@ -1,5 +1,5 @@
 ## Sample Chat App
-Made using [``socket.io``](https://socket.io)
+Made using [``socket.io``](https://socket.io). 
 To set up, run the following upon pulling the code
 ```bash
 npm install
