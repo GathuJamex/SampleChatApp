@@ -1,0 +1,126 @@
+ <!DOCTYPE html>
+  <html>
+    <head>
+      <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+      <!--Import jQuery before materialize.js-->
+      <script src="/socket.io/socket.io.js"></script>
+      <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  	  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+  	  <style>
+  	  	body{
+  	  		margin-top: 50px;
+  	  	}
+
+  	  	#messageArea{
+  	  		display: none; 
+  	  	}
+  	  </style>
+    </head>
+
+    <body>
+    	<div class="container">
+    		<!-- user form area -->
+    		<div id="userFormArea" class="row">
+    			<form class="col m8 offset-m2" id="userForm">
+    				<div class="input-field col m10 offset-m1">
+	          			<input placeholder="your username" id="username" type="text" class="validate">
+	          			<label for="username">Username</label>
+        			</div>
+
+		       	 	<button  type="submit" class="col m6 offset-m3 waves-effect waves-light btn center"><i class="material-icons right">arrow_forward</i>Enter Chart Room
+		       	 	</button>
+    			</form>	
+
+    		</div>
+
+
+    		<!-- chatting area -->
+    		<div class="row" id="messageArea">
+    			<!-- users -->
+    			<div class="col m6">
+          			<ul class="collection with-header" id="users">
+        				
+        			</ul>
+    			</div>
+
+    			<!-- chats -->
+    			<div class="col m6" id="messageFormArea">
+    				<div class="chat" id="chat"></div>
+
+    				<form id="messageForm">
+    					<div class="input-field">
+    						<i class="material-icons prefix">mode_edit</i>
+    						<label for="message">Enter Message</label>
+    						<textarea class="materialize-textarea" id="message"></textarea>
+
+    						<button type="submit" class="col m6 waves-effect waves-light btn"><i class="material-icons right">send</i>Send Message</button>
+    					</div>
+    				</form>
+    			</div>
+    		</div>
+
+    	</div>
+    </div>
+
+      
+     <script>
+     	$(function(){
+     		var socket = io.connect()
+     		var $messageForm = $('#messageForm')
+     		var $message = $('#message')
+     		var $chat= $('#chat')
+
+     		var $userForm = $('#userForm')
+     		var $userFormArea = $('#userFormArea')
+
+     		var $messageArea = $('#messageArea')
+     		var $users = $('#users')
+     		var $username = $('#username')
+
+
+     		$messageForm.submit(function(e){
+     			e.preventDefault()
+     			console.log("form submitted")
+     			socket.emit('send message', $username.val(), $message.val())
+     			$message.val('')
+     		})
+
+     		socket.on('new message', function(data){
+     			$chat.append('<p"> <span class="chip">'+data.sender+'</span>'+data.message+'</p>')
+     		})
+
+
+     		$userForm.submit(function(e){
+     			e.preventDefault()
+
+     			socket.emit('new user', $username.val(), function(data){
+ 					console.log("added a new user "+$username.val())
+ 					$userFormArea.hide()
+ 					$messageArea.show()
+     			})
+     			// $username.val('')
+     		})
+
+     		socket.on('get users', function(data){
+     			var html = '<li class="collection-header"><h4>Logged in users</h4></li>'
+
+     			for(i = 0; i < data.length; i++){
+     				html += '<li class="collection-item">'+data[i]+"</li>"
+     			}
+
+     			$users.html(html)
+     		})
+     	})
+     	
+     </script>
+    </body>
+  </html>
