@@ -47,9 +47,8 @@
     		<div class="row" id="messageArea">
     			<!-- users -->
     			<div class="col m6">
-          			<ul class="collection with-header" id="users">
-        				
-        			</ul>
+    				<div class="chip" id="my_account"></div>
+          			<ul class="collection with-header" id="users"></ul>
     			</div>
 
     			<!-- chats -->
@@ -62,7 +61,11 @@
     						<label for="message">Enter Message</label>
     						<textarea class="materialize-textarea" id="message"></textarea>
 
-    						<button type="submit" class="col m6 waves-effect waves-light btn"><i class="material-icons right">send</i>Send Message</button>
+    						<div class="right-align">
+    							<button type="submit" class=" waves-effect waves-light btn">
+    								<i class="material-icons right">send</i>Send Message
+    							</button>
+    						</div>
     					</div>
     				</form>
     			</div>
@@ -86,6 +89,8 @@
      		var $users = $('#users')
      		var $username = $('#username')
 
+     		var $my_account = $('#my_account')
+
 
      		$messageForm.submit(function(e){
      			e.preventDefault()
@@ -104,6 +109,7 @@
 
      			socket.emit('new user', $username.val(), function(data){
  					console.log("added a new user "+$username.val())
+ 					$my_account.html($username.val())
  					$userFormArea.hide()
  					$messageArea.show()
      			})
